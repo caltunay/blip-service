@@ -1,12 +1,23 @@
 from google.cloud import translate_v2 as translate_client
 import os
 from dotenv import load_dotenv
+import base64
+import tempfile
 
 # Load environment variables from .env file
 load_dotenv()
 
-# Set the path to the Google Cloud service account JSON file
-os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'google_stt.json'
+# Handle Google Cloud credentials for Railway deployment
+base64_creds = os.getenv('GOOGLE_STT_JSON_BASE64')
+if base64_creds:
+    creds_json = base64.b64decode(base64_creds).decode('utf-8')
+    temp_cred_file = tempfile.NamedTemporaryFile(delete=False, suffix='.json')
+    temp_cred_file.write(creds_json.encode('utf-8'))
+    temp_cred_file.close()
+    os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = temp_cred_file.name
+# else:
+    # Set the path to the Google Cloud service account JSON file (for local dev)
+    # os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'google_stt.json'
 
 def translate_text(text, source="en", target="tr"):
     """
