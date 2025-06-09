@@ -1,0 +1,55 @@
+[build]
+# Build command (if needed)
+# buildCommand = "pip install -r requirements.txt"
+
+[deploy]
+# Start command for your FastAPI application
+startCommand = "uvicorn app:app --host 0.0.0.0 --port $PORT"
+
+# Health check configuration
+healthcheckPath = "/docs"
+healthcheckTimeout = 300
+
+# Restart policy
+restartPolicyType = "ON_FAILURE"
+restartPolicyMaxRetries = 10
+
+[environments.production]
+# Environment variables for production
+[environments.production.variables]
+# Railway will automatically set PORT, but you can override if needed
+# PORT = "8000"
+
+# Add your Google Cloud credentials as environment variable
+# GOOGLE_STT_JSON_BASE64 = "your_base64_encoded_credentials"
+
+# Python specific settings
+PYTHONUNBUFFERED = "1"
+PYTHONDONTWRITEBYTECODE = "1"
+
+[environments.production.build]
+# Build settings specific to production
+buildCommand = "pip install --no-cache-dir -r requirements.txt"
+
+# Optional: specify Python version
+# pythonVersion = "3.12"
+
+[deploy.healthcheck]
+# Custom health check settings
+enabled = true
+path = "/docs"
+timeout = 300
+interval = 30
+retries = 3
+
+# Resource allocation (adjust based on your needs)
+[deploy.resources]
+# Memory in MB (Railway will auto-scale, but you can set limits)
+# memory = 2048
+# CPU allocation
+# cpu = 1000
+
+# Networking
+[deploy.networking]
+# Port configuration (Railway handles this automatically)
+# port = 8000
