@@ -1,0 +1,10 @@
+fastapi
+uvicorn
+transformers
+sentence-transformers
+Pillow
+torch
+torchvision
+requests
+python-dotenv
+google-cloud-translate
